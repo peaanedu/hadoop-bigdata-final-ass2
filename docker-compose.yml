@@ -435,23 +435,33 @@ services:
       retries: 15
 
   jupyter:
-      image: project-bigdata/jupyter:3.11-pyspark
-      container_name: jupyter
-      restart: unless-stopped
-      depends_on:
-        - spark-master
-      environment:
-        JUPYTER_TOKEN: ""
-        SPARK_MASTER_URL: spark://spark-master:7077
-      ports:
-        - "8888:8888"
-      volumes:
-        - ./notebooks:/workspace/notebooks
-        - ./datasets:/workspace/datasets
-      command: >
-        start-notebook.sh --NotebookApp.token='' --allow-root
-      networks:
-        - bigdata
+    image: project-bigdata/jupyter:3.11-pyspark
+    container_name: jupyter
+    restart: unless-stopped
+    depends_on:
+      - spark-master
+      - hive-server
+    environment:
+      JUPYTER_TOKEN: ""
+      SPARK_MASTER_URL: spark://spark-master:7077
+      HIVE_METASTORE_URI: thrift://hive-metastore:9083
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/workspace/notebooks
+      - ./datasets:/workspace/datasets:ro
+      - ./scripts:/workspace/scripts:ro
+    command:
+      [
+        "jupyter",
+        "lab",
+        "--ip=0.0.0.0",
+        "--port=8888",
+        "--no-browser",
+        "--allow-root",
+        "--ServerApp.token=",
+        "--ServerApp.allow_origin=*"
+      ]
 
   trino:
     image: trinodb/trino:472
