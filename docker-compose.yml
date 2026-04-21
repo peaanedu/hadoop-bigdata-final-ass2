@@ -172,10 +172,11 @@ services:
     ports:
       - "${RESOURCEMANAGER_UI_PORT:-8088}:8088"
     healthcheck:
-      test: ["CMD-SHELL", "/opt/platform/scripts/healthcheck-http.sh http://127.0.0.1:8088/ws/v1/cluster/info"]
-      interval: 20s
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/8088'"]
+      interval: 30s
       timeout: 10s
-      retries: 15
+      retries: 20
+      start_period: 120s
 
   nodemanager1:
     <<: *hadoop-common
@@ -303,10 +304,11 @@ services:
     ports:
       - "${HIVE_METASTORE_PORT:-9083}:9083"
     healthcheck:
-      test: ["CMD-SHELL", "/opt/platform/scripts/healthcheck-tcp.sh 127.0.0.1 9083"]
-      interval: 20s
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/9083'"]
+      interval: 30s
       timeout: 10s
       retries: 20
+      start_period: 120s
 
   hive-server:
     <<: *hive-common
@@ -330,10 +332,11 @@ services:
       - "${HIVE_SERVER2_PORT:-10000}:10000"
       - "${HIVE_HTTP_PORT:-10002}:10002"
     healthcheck:
-      test: ["CMD-SHELL", "/opt/platform/scripts/healthcheck-tcp.sh 127.0.0.1 10000"]
-      interval: 20s
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/10000'"]
+      interval: 30s
       timeout: 10s
-      retries: 30
+      retries: 20
+      start_period: 180s
 
   spark-master:
     image: apache/spark:3.5.5-python3
