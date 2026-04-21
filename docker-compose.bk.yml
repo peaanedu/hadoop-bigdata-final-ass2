@@ -116,10 +116,8 @@ services:
     container_name: datanode1
     hostname: datanode1
     depends_on:
-        - namenode
-        - datanode1
-        - datanode2
-        - datanode3
+      namenode:
+        condition: service_healthy
     environment:
       <<: *common-env
       HADOOP_ROLE: datanode
@@ -146,10 +144,8 @@ services:
     container_name: datanode2
     hostname: datanode2
     depends_on:
-        - namenode
-        - datanode1
-        - datanode2
-        - datanode3
+      namenode:
+        condition: service_healthy
     environment:
       <<: *common-env
       HADOOP_ROLE: datanode
@@ -179,10 +175,8 @@ services:
     container_name: datanode3
     hostname: datanode3
     depends_on:
-        - namenode
-        - datanode1
-        - datanode2
-        - datanode3
+      namenode:
+        condition: service_healthy
     environment:
       <<: *common-env
       HADOOP_ROLE: datanode
