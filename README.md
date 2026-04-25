@@ -71,6 +71,10 @@ A stable, Docker Compose based Big Data lab with:
         └── catalog/
             └── hive.properties
 ```
+## Topic Assignment II
+- Machine learning with disturbed computing
+- Near real-time data analytics
+- Building Data Platform (DataLake/DataWarehouse, Data pipeline and Query Engine)
 
 ## Prerequisites
 
