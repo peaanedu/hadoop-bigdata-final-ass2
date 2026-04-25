@@ -143,9 +143,19 @@ Then test:
 docker compose exec hive-server beeline -u jdbc:hive2://localhost:10000 -n hive -e "SHOW TABLES IN lab;"
 docker compose exec trino trino --execute "SHOW SCHEMAS FROM hive;"
 ```
-
+## Copy file
+### Check file directory
+- docker compose exec namenode bash -lc "ls -l /tmp/datasets"
+### script upload file HDFS
+- docker compose exec namenode bash -lc "hdfs dfs -mkdir -p /data/raw/sales && hdfs dfs -put -f /tmp/datasets/*.csv /data/raw/sales/"
+### Verify
+- docker compose exec namenode hdfs dfs -ls /data/raw/sales/
+### Pyspark Testing
+```input_path = "hdfs://namenode:9000/data/raw/sales/sales_orders.csv"
+df = spark.read.option("header", True).csv(input_path)
+df.show(5)
 ## Run the sample PySpark ETL
-
+```
 ```bash
 docker compose exec jupyter python /workspace/notebooks/etl_sales_to_parquet.py
 ```
