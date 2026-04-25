@@ -81,6 +81,7 @@ A stable, Docker Compose based Big Data lab with:
 ## Quick start
 
 ```bash
+docker compose build --no-cache --pull=false
 cp .env.example .env
 docker compose up -d --build
 ```
